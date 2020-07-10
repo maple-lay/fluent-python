@@ -29,22 +29,22 @@ class Order:
     """
 
     def __init__(self, customer, cart, promotion=None):
-        self.__total = sum(product.total() for product in self.cart)
         self.customer = customer
         self.cart = list(cart)
         self.promotion = promotion
+        self.__total = sum(product.total() for product in self.cart)
 
     def total(self):
         return self.__total
 
     def due(self):
-        if self.promotion:
+        if not self.promotion:
             return self.total()
         else:
             return self.total() - self.promotion.discount(self)
 
     def __repr__(self):
-        return "<Order total: {%.2f}, due:{%.2f}".format(self.total(), self.due())
+        return "<Order total: {:.2f}, due:{:.2f}".format(self.total(), self.due())
 
 
 class Promotion(ABC):
@@ -62,7 +62,7 @@ class FidelityPromo(Promotion):
         return order.total() * 0.05 if order.customer.fidelity >= 1000 else 0
 
 
-class BulkItemProo(Promotion):
+class BulkItemPromo(Promotion):
     """
     为单件产品数量超过20的客户，提供10%的折扣
     """
@@ -70,7 +70,7 @@ class BulkItemProo(Promotion):
     def discount(self, order):
         discount = 0
         for item in order.cart:
-            if item.quality > 20:
+            if item.quantity > 20:
                 discount += item.total() * 0.1
         return discount
 
