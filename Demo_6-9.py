@@ -1,5 +1,6 @@
 """
 使用函数作为对象，替换"命令"模式
+这里只是一个测试
 """
 
 
@@ -13,3 +14,6 @@ class MacroCmomand:
     def __call__(self, *args, **kwargs):
         for command in self.commands:
             command()
+
+
+print("这里只是一个测试")
